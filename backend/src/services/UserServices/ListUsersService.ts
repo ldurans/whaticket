@@ -28,7 +28,7 @@ const ListUsersService = async ({
       { email: { [Op.like]: `%${searchParam.toLowerCase()}%` } }
     ]
   };
-  const limit = 20;
+  const limit = 40;
   const offset = limit * (+pageNumber - 1);
 
   const { count, rows: users } = await User.findAndCountAll({

@@ -28,7 +28,7 @@ const ListContactsService = async ({
       { number: { [Op.like]: `%${searchParam.toLowerCase().trim()}%` } }
     ]
   };
-  const limit = 20;
+  const limit = 40;
   const offset = limit * (+pageNumber - 1);
 
   const { count, rows: contacts } = await Contact.findAndCountAll({

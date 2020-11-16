@@ -2,7 +2,7 @@ import { join } from "path";
 import { promisify } from "util";
 import { writeFile } from "fs";
 import { Op } from "sequelize";
-import { subHours } from "date-fns";
+// import { subHours } from "date-fns";
 import * as Sentry from "@sentry/node";
 
 import {
@@ -113,22 +113,23 @@ const verifyTicket = async (
     }
   }
 
-  if (!ticket) {
-    ticket = await Ticket.findOne({
-      where: {
-        updatedAt: {
-          [Op.between]: [+subHours(new Date(), 2), +new Date()]
-        },
-        contactId: groupContact ? groupContact.id : contact.id
-      },
-      order: [["updatedAt", "DESC"]],
-      include: ["contact"]
-    });
+  // Reabrir ticket caso o contato ocorra em até 1h
+  // if (!ticket) {
+  //   ticket = await Ticket.findOne({
+  //     where: {
+  //       updatedAt: {
+  //         [Op.between]: [+subHours(new Date(), 1), +new Date()]
+  //       },
+  //       contactId: groupContact ? groupContact.id : contact.id
+  //     },
+  //     order: [["updatedAt", "DESC"]],
+  //     include: ["contact"]
+  //   });
 
-    if (ticket) {
-      await ticket.update({ status: "pending", userId: null });
-    }
-  }
+  //   if (ticket) {
+  //     await ticket.update({ status: "pending", userId: null });
+  //   }
+  // }
 
   if (!ticket) {
     const { id } = await Ticket.create({
@@ -175,6 +176,7 @@ const handlMedia = async (
       "base64"
     );
   } catch (err) {
+    console.log("writeFileAsync", err);
     console.log(err);
   }
 
