@@ -540,14 +540,16 @@ const MessagesList = ({ ticketId, isGroup, setReplyingMessage }) => {
 					})}
 				></span>
 				<div className={classes.quotedMsg}>
+					{/* causando erro no elemento */}
 					{!message.quotedMsg?.fromMe && (
 						<span className={classes.messageContactName}>
+							Endenter
 							{message.quotedMsg?.contact?.name}
 						</span>
 					)}
 					{message.quotedMsg?.body}
 				</div>
-			</div>
+			</div >
 		);
 	};
 

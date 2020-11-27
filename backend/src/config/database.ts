@@ -4,6 +4,7 @@ module.exports = {
   define: {
     charset: "utf8mb4",
     collate: "utf8mb4_bin"
+    // freezeTableName: true
   },
   dialect: process.env.DB_DIALECT || "postgres",
   timezone: "UTC",
@@ -11,5 +12,5 @@ module.exports = {
   database: process.env.DB_NAME || "whatsapp",
   username: process.env.DB_USER || "postgres",
   password: process.env.DB_PASS || "marina@0509",
-  logging: false
+  logging: console.log
 };

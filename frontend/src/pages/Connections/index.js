@@ -225,7 +225,6 @@ const Connections = () => {
 				}
 			}
 		}
-
 		setConfirmModalInfo(confirmationModalInitialState);
 	};
 
@@ -265,17 +264,17 @@ const Connections = () => {
 				{(whatsApp.status === "CONNECTED" ||
 					whatsApp.status === "PAIRING" ||
 					whatsApp.status === "TIMEOUT") && (
-					<Button
-						size="small"
-						variant="outlined"
-						color="secondary"
-						onClick={() => {
-							handleOpenConfirmationModal("disconnect", whatsApp.id);
-						}}
-					>
-						{i18n.t("connections.buttons.disconnect")}
-					</Button>
-				)}
+						<Button
+							size="small"
+							variant="outlined"
+							color="secondary"
+							onClick={() => {
+								handleOpenConfirmationModal("disconnect", whatsApp.id);
+							}}
+						>
+							{i18n.t("connections.buttons.disconnect")}
+						</Button>
+					)}
 				{whatsApp.status === "OPENING" && (
 					<Button size="small" variant="outlined" disabled color="default">
 						{i18n.t("connections.buttons.connecting")}
@@ -384,48 +383,50 @@ const Connections = () => {
 						{loading ? (
 							<TableRowSkeleton />
 						) : (
-							<>
-								{whatsApps?.length > 0 &&
-									whatsApps.map(whatsApp => (
-										<TableRow key={whatsApp.id}>
-											<TableCell align="center">{whatsApp.name}</TableCell>
-											<TableCell align="center">
-												{renderStatusToolTips(whatsApp)}
-											</TableCell>
-											<TableCell align="center">
-												{renderActionButtons(whatsApp)}
-											</TableCell>
-											<TableCell align="center">
-												{format(parseISO(whatsApp.updatedAt), "dd/MM/yy HH:mm")}
-											</TableCell>
-											<TableCell align="center">
-												{whatsApp.isDefault && (
-													<div className={classes.customTableCell}>
-														<CheckCircle style={{ color: green[500] }} />
-													</div>
-												)}
-											</TableCell>
-											<TableCell align="center">
-												<IconButton
-													size="small"
-													onClick={() => handleEditWhatsApp(whatsApp)}
-												>
-													<Edit />
-												</IconButton>
+								<>
+									{whatsApps?.length > 0 &&
+										whatsApps.map(whatsApp => (
+											<TableRow key={whatsApp.id}>
+												<TableCell align="center">{whatsApp.name}</TableCell>
+												<TableCell align="center">
+													111
+													{renderStatusToolTips(whatsApp)}
+												</TableCell>
+												<TableCell align="center">
+													22
+													{renderActionButtons(whatsApp)}
+												</TableCell>
+												<TableCell align="center">
+													{format(parseISO(whatsApp.updatedAt), "dd/MM/yy HH:mm")}
+												</TableCell>
+												<TableCell align="center">
+													{whatsApp.isDefault && (
+														<div className={classes.customTableCell}>
+															<CheckCircle style={{ color: green[500] }} />
+														</div>
+													)}
+												</TableCell>
+												<TableCell align="center">
+													<IconButton
+														size="small"
+														onClick={() => handleEditWhatsApp(whatsApp)}
+													>
+														<Edit />
+													</IconButton>
 
-												<IconButton
-													size="small"
-													onClick={e => {
-														handleOpenConfirmationModal("delete", whatsApp.id);
-													}}
-												>
-													<DeleteOutline />
-												</IconButton>
-											</TableCell>
-										</TableRow>
-									))}
-							</>
-						)}
+													<IconButton
+														size="small"
+														onClick={e => {
+															handleOpenConfirmationModal("delete", whatsApp.id);
+														}}
+													>
+														<DeleteOutline />
+													</IconButton>
+												</TableCell>
+											</TableRow>
+										))}
+								</>
+							)}
 					</TableBody>
 				</Table>
 			</Paper>

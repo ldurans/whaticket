@@ -15,11 +15,13 @@ import {
 import Contact from "../../models/Contact";
 import Ticket from "../../models/Ticket";
 import Message from "../../models/Message";
+// import AutoReply from "../../models/AutoReply";
 
 import { getIO } from "../../libs/socket";
 import AppError from "../../errors/AppError";
 import ShowTicketService from "../TicketServices/ShowTicketService";
 import CreateMessageService from "../MessageServices/CreateMessageService";
+// import ShowAutoReplyService from "../AutoReplyServices/ShowAutoReplyService";
 
 interface Session extends Client {
   id?: number;
@@ -85,6 +87,17 @@ const verifyGroup = async (msgGroupContact: WbotContact) => {
   return groupContact;
 };
 
+// const verifyAutoReplyBoasVindas = async () => { };
+
+// const autoReplyWelcome = async () => {
+//   const reply = await AutoReply.findOne({
+//     where: {
+//       action: "0"
+//     }
+//   });
+//   return reply;
+// };
+
 const verifyTicket = async (
   contact: Contact,
   whatsappId: number,
@@ -139,7 +152,6 @@ const verifyTicket = async (
       isGroup: !!groupContact,
       whatsappId
     });
-
     ticket = await ShowTicketService(id);
   }
 
@@ -301,7 +313,8 @@ const handleMessage = async (
     const profilePicUrl = await msgContact.getProfilePicUrl();
     const contact = await verifyContact(msgContact, profilePicUrl);
     const ticket = await verifyTicket(contact, wbot.id!, groupContact);
-
+    // const welcome = await autoReplyWelcome();
+    // console.log(welcome);
     await verifyMessage(msg, ticket, contact);
   } catch (err) {
     Sentry.captureException(err);
@@ -342,7 +355,6 @@ const handleMsgAck = async (msg: WbotMessage, ack: MessageAck) => {
 
 const wbotMessageListener = (wbot: Session): void => {
   wbot.on("message_create", async msg => {
-    // console.log(msg);
     handleMessage(msg, wbot);
   });
 
