@@ -63,13 +63,13 @@ const ListTicketsService = async ({
         model: Message,
         as: "messages",
         attributes: ["id", "body"],
-        where: {
-          body: where(
-            fn("LOWER", col("body")),
-            "LIKE",
-            `%${sanitizedSearchParam}%`
-          )
-        },
+        // where: {
+        //   body: where(
+        //     fn("LOWER", col("body")),
+        //     "LIKE",
+        //     `%${sanitizedSearchParam}%`
+        //   )
+        // },
         required: false,
         duplicating: false
       }
@@ -120,7 +120,7 @@ const ListTicketsService = async ({
     ];
   }
 
-  const limit = 10;
+  const limit = 50;
   const offset = limit * (+pageNumber - 1);
 
   const { count, rows: tickets } = await Ticket.findAndCountAll({
