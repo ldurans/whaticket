@@ -7,22 +7,23 @@ import {
   DataType,
   PrimaryKey,
   BelongsTo,
-  ForeignKey
+  ForeignKey,
+  AutoIncrement,
+  HasMany
 } from "sequelize-typescript";
 import User from "./User";
 import AutoReply from "./AutoReply";
+import StepsReplyAction from "./StepsReplyAction";
 
 @Table({ freezeTableName: true })
 class StepsReply extends Model<StepsReply> {
   @PrimaryKey
+  @AutoIncrement
   @Column
   id: string;
 
   @Column(DataType.TEXT)
   reply: string;
-
-  @Column(DataType.INTEGER)
-  stepOrder: string;
 
   @Column
   @ForeignKey(() => AutoReply)
@@ -30,9 +31,6 @@ class StepsReply extends Model<StepsReply> {
 
   @BelongsTo(() => AutoReply, "idAutoReply")
   autoReply: AutoReply;
-
-  @Column
-  action: number;
 
   @ForeignKey(() => User)
   @Column
@@ -48,6 +46,9 @@ class StepsReply extends Model<StepsReply> {
   @UpdatedAt
   @Column(DataType.DATE(6))
   updatedAt: Date;
+
+  @HasMany(() => StepsReplyAction)
+  stepsReplyAction: StepsReplyAction;
 
   tableName: "StepsReply";
 }

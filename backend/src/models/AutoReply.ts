@@ -8,13 +8,17 @@ import {
   PrimaryKey,
   Default,
   BelongsTo,
-  ForeignKey
+  ForeignKey,
+  AutoIncrement,
+  HasMany
 } from "sequelize-typescript";
 import User from "./User";
+import StepsReply from "./StepsReply";
 
 @Table({ freezeTableName: true })
 class AutoReply extends Model<AutoReply> {
   @PrimaryKey
+  @AutoIncrement
   @Column
   id: string;
 
@@ -39,6 +43,9 @@ class AutoReply extends Model<AutoReply> {
   @UpdatedAt
   @Column(DataType.DATE(6))
   updatedAt: Date;
+
+  @HasMany(() => StepsReply)
+  stepsReply: StepsReply;
 
   tableName: "AutoReply";
 }

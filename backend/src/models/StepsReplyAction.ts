@@ -7,7 +7,8 @@ import {
   DataType,
   PrimaryKey,
   BelongsTo,
-  ForeignKey
+  ForeignKey,
+  AutoIncrement
 } from "sequelize-typescript";
 import User from "./User";
 import StepsReply from "./StepsReply";
@@ -15,6 +16,7 @@ import StepsReply from "./StepsReply";
 @Table({ freezeTableName: true })
 class StepsReplyActions extends Model<StepsReplyActions> {
   @PrimaryKey
+  @AutoIncrement
   @Column
   id: string;
 
