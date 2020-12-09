@@ -1,13 +1,20 @@
 import * as Yup from "yup";
 
 import AppError from "../../errors/AppError";
+import Queue from "../../models/Queue";
 import User from "../../models/User";
+import UsersQueues from "../../models/UsersQueues";
+
+interface UserQueues {
+  queue?: number;
+}
 
 interface UserData {
   email?: string;
   password?: string;
   name?: string;
   profile?: string;
+  queues?: UserQueues[];
 }
 
 interface Request {
@@ -42,12 +49,21 @@ const UpdateUserService = async ({
     password: Yup.string()
   });
 
-  const { email, password, profile, name } = userData;
+  const { email, password, profile, name, queues } = userData;
 
   try {
     await schema.validate({ email, password, profile, name });
   } catch (err) {
     throw new AppError(err.message);
+  }
+
+  if (queues) {
+    await UsersQueues.destroy({ where: { userId } });
+    await Promise.all(
+      queues.map(async queue => {
+        await UsersQueues.upsert({ queueId: queue, userId });
+      })
+    );
   }
 
   await user.update({
@@ -57,11 +73,17 @@ const UpdateUserService = async ({
     name
   });
 
+  await user.reload({
+    attributes: ["id", "name", "email", "profile"],
+    include: [{ model: Queue, attributes: ["id", "queue"] }]
+  });
+
   const serializedUser = {
     id: user.id,
     name: user.name,
     email: user.email,
-    profile: user.profile
+    profile: user.profile,
+    queues: user.queues
   };
 
   return serializedUser;
