@@ -1,4 +1,6 @@
 import { Sequelize, Op } from "sequelize";
+import Queue from "../../models/Queue";
+// import UsersQueues from "../../models/UsersQueues";
 import User from "../../models/User";
 
 interface Request {
@@ -33,10 +35,12 @@ const ListUsersService = async ({
 
   const { count, rows: users } = await User.findAndCountAll({
     where: whereCondition,
+    include: [{ model: Queue, attributes: ["id", "queue"] }],
     attributes: ["name", "id", "email", "profile"],
     limit,
     offset,
-    order: [["createdAt", "DESC"]]
+    distinct: true,
+    order: [["name", "ASC"]]
   });
 
   const hasMore = count > offset + users.length;

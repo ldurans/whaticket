@@ -10,10 +10,13 @@ import {
   PrimaryKey,
   AutoIncrement,
   Default,
-  HasMany
+  HasMany,
+  BelongsToMany
 } from "sequelize-typescript";
 import { hash, compare } from "bcryptjs";
 import Ticket from "./Ticket";
+import Queue from "./Queue";
+import UsersQueues from "./UsersQueues";
 
 @Table
 class User extends Model<User> {
@@ -50,6 +53,9 @@ class User extends Model<User> {
 
   @HasMany(() => Ticket)
   tickets: Ticket[];
+
+  @BelongsToMany(() => Queue, () => UsersQueues, "userId", "queueId")
+  queues: Queue[];
 
   @BeforeUpdate
   @BeforeCreate

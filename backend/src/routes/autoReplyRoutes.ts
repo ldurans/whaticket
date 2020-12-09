@@ -29,5 +29,10 @@ autoReplyRoutes.put(
   isAuth,
   StepsReplyController.update
 );
+autoReplyRoutes.delete(
+  "/auto-reply/:idAutoReply/steps/:stepsReplyId",
+  isAuth,
+  StepsReplyController.remove
+);
 
 export default autoReplyRoutes;

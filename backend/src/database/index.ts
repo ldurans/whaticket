@@ -9,6 +9,8 @@ import Message from "../models/Message";
 import AutoReply from "../models/AutoReply";
 import StepsReply from "../models/StepsReply";
 import StepsReplyAction from "../models/StepsReplyAction";
+import Queue from "../models/Queue";
+import UsersQueues from "../models/UsersQueues";
 
 // eslint-disable-next-line
 const dbConfig = require("../config/database");
@@ -26,7 +28,9 @@ const models = [
   Setting,
   AutoReply,
   StepsReply,
-  StepsReplyAction
+  StepsReplyAction,
+  Queue,
+  UsersQueues
 ];
 
 sequelize.addModels(models);

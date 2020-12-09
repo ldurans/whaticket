@@ -9,7 +9,8 @@ import {
   BelongsTo,
   ForeignKey,
   AutoIncrement,
-  HasMany
+  HasMany,
+  Default
 } from "sequelize-typescript";
 import User from "./User";
 import AutoReply from "./AutoReply";
@@ -24,6 +25,10 @@ class StepsReply extends Model<StepsReply> {
 
   @Column(DataType.TEXT)
   reply: string;
+
+  @Default(false)
+  @Column(DataType.BOOLEAN)
+  initialStep: boolean;
 
   @Column
   @ForeignKey(() => AutoReply)

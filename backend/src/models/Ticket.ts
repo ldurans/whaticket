@@ -22,6 +22,7 @@ import User from "./User";
 import Whatsapp from "./Whatsapp";
 import AutoReply from "./AutoReply";
 import StepsReply from "./StepsReply";
+import Queue from "./Queue";
 
 import SendWhatsAppMessage from "../services/WbotServices/SendWhatsAppMessage";
 import SetTicketMessagesAsRead from "../helpers/SetTicketMessagesAsRead";
@@ -91,6 +92,13 @@ class Ticket extends Model<Ticket> {
 
   @BelongsTo(() => StepsReply)
   stepsReply: StepsReply;
+
+  @ForeignKey(() => Queue)
+  @Column
+  queueId: number;
+
+  @BelongsTo(() => Queue)
+  queue: Queue;
 
   @AfterFind
   static async countTicketsUnreadMessages(tickets: Ticket[]): Promise<void> {

@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import CreateStepsReplyService from "../services/AutoReplyServices/StepsReplyServices/CreateStepsReplyService";
 import AppError from "../errors/AppError";
 import UpdateStepsReplyService from "../services/AutoReplyServices/StepsReplyServices/UpdateStepsReplyService";
+import DeleteStepsReplyService from "../services/AutoReplyServices/StepsReplyServices/DeleteStepsReplyService";
 
 interface StepsReplyData {
   reply: string;
@@ -66,4 +67,17 @@ export const update = async (
   });
 
   return res.status(200).json(stepsReply);
+};
+
+export const remove = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  if (req.user.profile !== "admin") {
+    throw new AppError("ERR_NO_PERMISSION", 403);
+  }
+  const { stepsReplyId } = req.params;
+
+  await DeleteStepsReplyService(stepsReplyId);
+  return res.status(200).json({ message: "Steps reply deleted" });
 };
