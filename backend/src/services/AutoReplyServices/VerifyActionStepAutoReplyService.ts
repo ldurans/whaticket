@@ -1,5 +1,7 @@
 // import { Op } from "sequelize";
 import { fn, where, col } from "sequelize";
+import AutoReply from "../../models/AutoReply";
+import StepsReply from "../../models/StepsReply";
 // import StepsReply from "../../models/StepsReply";
 import StepsReplyAction from "../../models/StepsReplyAction";
 // import AppError from "../../errors/AppError";
@@ -17,7 +19,14 @@ const VerifyActionStepAutoReplyService = async (
       stepReplyId: stepAutoReplyId,
       // words: msg
       words: where(fn("lower", col("words")), fn("lower", msg))
-    }
+    },
+    include: [
+      {
+        model: StepsReply,
+        as: "stepsReply",
+        include: [{ model: AutoReply, as: "autoReply" }]
+      }
+    ]
     // include: [
     //   {
     //     model: StepsReply,

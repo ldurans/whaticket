@@ -25,6 +25,14 @@ class AutoReply extends Model<AutoReply> {
   @Column(DataType.TEXT)
   name: string;
 
+  @Default(null)
+  @Column(DataType.TEXT)
+  celularTeste: string;
+
+  @Default(true)
+  @Column
+  isActive: boolean;
+
   @Default(0)
   @Column
   action: number;

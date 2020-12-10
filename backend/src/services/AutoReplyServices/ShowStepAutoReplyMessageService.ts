@@ -19,13 +19,13 @@ const ShowStepAutoReplyMessageService = async (
     where.id = stepId;
   }
   const stepReply = await StepsReply.findOne({
-    attributes: ["id", "reply", "stepOrder"],
+    // attributes: ["id", "reply", "stepOrder"],
     where,
     include: [
       {
         model: AutoReply,
-        where: { action }, // action 0 - AutoReply Criacao ticket ou 1 - Resolução do ticket
-        attributes: ["id", "name"]
+        where: { action } // action 0 - AutoReply Criacao ticket ou 1 - Resolução do ticket
+        // attributes: ["id", "name"]
       }
     ]
   });

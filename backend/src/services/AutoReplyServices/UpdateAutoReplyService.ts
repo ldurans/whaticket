@@ -5,6 +5,8 @@ interface AutoReplyData {
   name: string;
   action: number;
   userId: number;
+  isActive: boolean;
+  celularTeste?: string;
 }
 
 interface Request {
@@ -16,11 +18,11 @@ const UpdateAutoReplyService = async ({
   autoReplyData,
   autoReplyId
 }: Request): Promise<AutoReply> => {
-  const { name, action, userId } = autoReplyData;
+  const { name, action, userId, isActive, celularTeste } = autoReplyData;
 
   const autoReply = await AutoReply.findOne({
     where: { id: autoReplyId },
-    attributes: ["id", "name", "action", "userId"]
+    attributes: ["id", "name", "action", "userId", "isActive", "celularTeste"]
   });
 
   if (!autoReply) {
@@ -30,11 +32,13 @@ const UpdateAutoReplyService = async ({
   await autoReply.update({
     name,
     action,
-    userId
+    userId,
+    isActive,
+    celularTeste
   });
 
   await autoReply.reload({
-    attributes: ["id", "name", "action", "userId"]
+    attributes: ["id", "name", "action", "userId", "isActive", "celularTeste"]
   });
 
   return autoReply;

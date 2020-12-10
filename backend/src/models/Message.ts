@@ -88,15 +88,16 @@ class Message extends Model<Message> {
 
   @BeforeUpsert
   static async AutoReplyActionTicket(instance: Message): Promise<void> {
-    console.log("message BeforeUpsert", instance);
     const ticket = await ShowTicketService(instance.ticketId);
+    const celularContato = ticket.contact.number;
+    let celularTeste = "";
+
     if (
       ticket.autoReplyId &&
-      ticket.contactId === 1 &&
+      // ticket.contactId === 1 &&
       ticket.status === "pending" &&
       !instance.fromMe
     ) {
-      console.log("Entou no IF", ticket);
       if (ticket.autoReplyId) {
         const actionAutoReply = await VerifyActionStepAutoReplyService(
           ticket.stepAutoReplyId,
@@ -114,6 +115,16 @@ class Message extends Model<Message> {
               actionAutoReply.nextStepId
             );
 
+            // Verificar se rotina em teste
+            celularTeste = stepAutoReply.autoReply.celularTeste;
+            if (
+              (celularTeste &&
+                celularContato?.indexOf(celularTeste.substr(1)) === -1) ||
+              !celularContato
+            ) {
+              return;
+            }
+
             await SendWhatsAppMessage({
               body: stepAutoReply.reply,
               ticket,
@@ -125,7 +136,7 @@ class Message extends Model<Message> {
           // action = 1: enviar para fila: queue
           if (actionAutoReply.action === 1) {
             ticket.update({
-              queue: actionAutoReply.queue,
+              queue: actionAutoReply.queueId,
               autoReplyId: null,
               stepAutoReplyId: null
             });
@@ -147,6 +158,17 @@ class Message extends Model<Message> {
             ticket.autoReplyId,
             ticket.stepAutoReplyId
           );
+
+          // Verificar se rotina em teste
+          celularTeste = stepAutoReply.autoReply.celularTeste;
+          if (
+            (celularTeste &&
+              celularContato?.indexOf(celularTeste.substr(1)) === -1) ||
+            !celularContato
+          ) {
+            return;
+          }
+
           await SendWhatsAppMessage({
             body: stepAutoReply.reply,
             ticket,

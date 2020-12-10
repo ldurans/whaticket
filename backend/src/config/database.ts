@@ -12,5 +12,5 @@ module.exports = {
   database: process.env.DB_NAME || "whatsapp",
   username: process.env.DB_USER || "postgres",
   password: process.env.DB_PASS || "marina@0509",
-  logging: console.log
+  logging: false // console.log
 };

@@ -3,6 +3,7 @@ import isAuth from "../middleware/isAuth";
 
 import * as AutoReplyController from "../controllers/AutoReplyController";
 import * as StepsReplyController from "../controllers/StepsReplyController";
+import * as StepsReplyActionController from "../controllers/StepsReplyActionController";
 
 const autoReplyRoutes = express.Router();
 
@@ -33,6 +34,22 @@ autoReplyRoutes.delete(
   "/auto-reply/:idAutoReply/steps/:stepsReplyId",
   isAuth,
   StepsReplyController.remove
+);
+
+autoReplyRoutes.post(
+  "/auto-reply-action",
+  isAuth,
+  StepsReplyActionController.store
+);
+autoReplyRoutes.put(
+  "/auto-reply-action/:stepsReplyActionId",
+  isAuth,
+  StepsReplyActionController.update
+);
+autoReplyRoutes.delete(
+  "/auto-reply-action/:stepsReplyActionId",
+  isAuth,
+  StepsReplyActionController.remove
 );
 
 export default autoReplyRoutes;

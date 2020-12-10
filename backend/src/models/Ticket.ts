@@ -25,7 +25,7 @@ import StepsReply from "./StepsReply";
 import Queue from "./Queue";
 
 import SendWhatsAppMessage from "../services/WbotServices/SendWhatsAppMessage";
-import SetTicketMessagesAsRead from "../helpers/SetTicketMessagesAsRead";
+// import SetTicketMessagesAsRead from "../helpers/SetTicketMessagesAsRead";
 import ShowTicketService from "../services/TicketServices/ShowTicketService";
 import ShowStepAutoReplyMessageService from "../services/AutoReplyServices/ShowStepAutoReplyMessageService";
 
@@ -122,26 +122,30 @@ class Ticket extends Model<Ticket> {
 
   @AfterCreate
   static async AutoReplyWelcome(instance: Ticket): Promise<void> {
-    if (instance.contactId === 1) {
-      const stepAutoReply = await ShowStepAutoReplyMessageService(
-        0,
-        0,
-        0,
-        true
-      );
+    const contato = await Contact.findByPk(instance.contactId);
+    const stepAutoReply = await ShowStepAutoReplyMessageService(0, 0, 0, true);
+    const { celularTeste } = stepAutoReply.autoReply;
+    const celularContato = contato?.number;
+    if (
+      (celularTeste &&
+        celularContato?.indexOf(celularTeste.substr(1)) === -1) ||
+      !celularContato
+    ) {
+      return;
+    }
+
+    if (stepAutoReply) {
       await instance.update({
         autoReplyId: stepAutoReply.autoReply.id,
         stepAutoReplyId: stepAutoReply.id
       });
       const ticket = await ShowTicketService(instance.id);
-      if (stepAutoReply) {
-        await SendWhatsAppMessage({
-          body: stepAutoReply.reply,
-          ticket,
-          quotedMsg: undefined
-        });
-        await SetTicketMessagesAsRead(ticket);
-      }
+      await SendWhatsAppMessage({
+        body: stepAutoReply.reply,
+        ticket,
+        quotedMsg: undefined
+      });
+      // await SetTicketMessagesAsRead(ticket);
     }
   }
 }

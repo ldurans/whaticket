@@ -11,6 +11,8 @@ interface AutoReplyData {
   name: string;
   action: number;
   userId: number;
+  isActive: boolean;
+  celularTeste?: string;
 }
 
 export const store = async (req: Request, res: Response): Promise<Response> => {

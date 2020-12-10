@@ -4,6 +4,7 @@ import { startOfDay, endOfDay, parseISO } from "date-fns";
 import Ticket from "../../models/Ticket";
 import Contact from "../../models/Contact";
 import Message from "../../models/Message";
+import UsersQueues from "../../models/UsersQueues";
 
 interface Request {
   searchParam?: string;
@@ -13,6 +14,7 @@ interface Request {
   showAll?: string;
   userId: string;
   withUnreadMessages?: string;
+  queue?: string;
 }
 
 interface Response {
@@ -28,12 +30,16 @@ const ListTicketsService = async ({
   date,
   showAll,
   userId,
-  withUnreadMessages
+  withUnreadMessages,
+  queue
 }: Request): Promise<Response> => {
   let whereCondition: Filterable["where"] = {
     [Op.or]: [{ userId }, { status: "pending" }]
   };
   let includeCondition: Includeable[];
+
+  const queues = await UsersQueues.findAll({ where: { userId } });
+  const queuesIds = queues.map(q => q.queueId);
 
   includeCondition = [
     {
@@ -120,6 +126,26 @@ const ListTicketsService = async ({
     ];
   }
 
+  if (!searchParam && status !== "closed" /* && profile !== "admin" */) {
+    if (queue) {
+      whereCondition = {
+        ...whereCondition,
+        queueId: { [Op.in]: [queue] }
+      };
+    } else {
+      whereCondition = {
+        ...whereCondition,
+        // [Op.and]: [
+        // {
+        queueId: {
+          [Op.or]: [{ [Op.in]: queuesIds }, { [Op.is]: null }]
+        }
+        // }
+        // ]
+      };
+    }
+  }
+
   const limit = 50;
   const offset = limit * (+pageNumber - 1);
 
@@ -129,7 +155,8 @@ const ListTicketsService = async ({
     distinct: true,
     limit,
     offset,
-    order: [["updatedAt", "DESC"]]
+    order: [["updatedAt", "DESC"]],
+    logging: console.log
   });
 
   const hasMore = count > offset + tickets.length;

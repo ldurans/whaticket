@@ -1,9 +1,11 @@
 import User from "../../models/User";
 import AppError from "../../errors/AppError";
+import Queue from "../../models/Queue";
 
 const ShowUserService = async (id: string | number): Promise<User> => {
   const user = await User.findByPk(id, {
-    attributes: ["name", "id", "email", "profile", "tokenVersion"]
+    attributes: ["name", "id", "email", "profile", "tokenVersion"],
+    include: [{ model: Queue, as: "queues" }]
   });
 
   if (!user) {

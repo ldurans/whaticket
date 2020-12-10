@@ -12,6 +12,7 @@ import {
 } from "sequelize-typescript";
 import User from "./User";
 import StepsReply from "./StepsReply";
+import Queue from "./Queue";
 
 @Table({ freezeTableName: true })
 class StepsReplyActions extends Model<StepsReplyActions> {
@@ -48,8 +49,12 @@ class StepsReplyActions extends Model<StepsReplyActions> {
   @Column(DataType.DATE(6))
   updatedAt: Date;
 
+  @ForeignKey(() => Queue)
   @Column(DataType.INTEGER)
-  queue: number;
+  queueId: number;
+
+  @BelongsTo(() => Queue)
+  queue: Queue;
 
   @ForeignKey(() => User)
   @Column

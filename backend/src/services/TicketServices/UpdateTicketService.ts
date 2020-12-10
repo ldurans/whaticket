@@ -56,8 +56,11 @@ const UpdateTicketService = async ({
     await CheckContactOpenTickets(ticket.contact.id);
   }
 
+  // verificar se o front envia close e substituir por closed
+  const statusData = status === "close" ? "closed" : status;
+
   await ticket.update({
-    status,
+    status: statusData,
     userId
   });
 
