@@ -36,12 +36,12 @@ export const initWbot = async (whatsapp: Whatsapp): Promise<Session> => {
       if (whatsapp && whatsapp.session) {
         sessionCfg = JSON.parse(whatsapp.session);
       }
-
+      console.log("process.env.CHROME_BIN", process.env.CHROME_BIN);
       const wbot: Session = new Client({
         session: sessionCfg,
         puppeteer: {
           headless: true,
-          executablePath: process.env.CHROME_BIN || null,
+          executablePath: process.env.CHROME_BIN || "/usr/bin/google-chrome",
           args: [
             "--no-sandbox",
             "--disable-setuid-sandbox",

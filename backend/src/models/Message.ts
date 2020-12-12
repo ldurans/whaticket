@@ -18,6 +18,7 @@ import ShowTicketService from "../services/TicketServices/ShowTicketService";
 import SendWhatsAppMessage from "../services/WbotServices/SendWhatsAppMessage";
 import Contact from "./Contact";
 import Ticket from "./Ticket";
+import { getIO } from "../libs/socket";
 
 @Table
 class Message extends Model<Message> {
@@ -104,6 +105,8 @@ class Message extends Model<Message> {
           instance.body
         );
         if (actionAutoReply) {
+          const io = getIO();
+
           // action = 0: enviar para proximo step: nextStepId
           if (actionAutoReply.action === 0) {
             await ticket.update({
@@ -136,7 +139,7 @@ class Message extends Model<Message> {
           // action = 1: enviar para fila: queue
           if (actionAutoReply.action === 1) {
             ticket.update({
-              queue: actionAutoReply.queueId,
+              queueId: actionAutoReply.queueId,
               autoReplyId: null,
               stepAutoReplyId: null
             });
@@ -151,8 +154,12 @@ class Message extends Model<Message> {
               stepAutoReplyId: null
             });
           }
+          io.to(ticket.status).emit("ticket", {
+            action: "updateQueue",
+            ticket
+          });
         } else {
-          console.log("not step action");
+          // retornar a ultima mensagem (estapa atual do ticket)
           const stepAutoReply = await ShowStepAutoReplyMessageService(
             0,
             ticket.autoReplyId,

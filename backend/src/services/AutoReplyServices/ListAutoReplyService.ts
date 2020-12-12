@@ -23,7 +23,8 @@ const ListAutoReplyService = async (): Promise<Response> => {
             "action",
             "queueId",
             "userIdDestination",
-            "nextStepId"
+            "nextStepId",
+            "replyDefinition"
           ]
         }
       ],

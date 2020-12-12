@@ -31,6 +31,9 @@ class StepsReplyActions extends Model<StepsReplyActions> {
   @Column(DataType.STRING)
   words: string;
 
+  @Column(DataType.TEXT)
+  replyDefinition: string;
+
   @Column
   action: number;
 

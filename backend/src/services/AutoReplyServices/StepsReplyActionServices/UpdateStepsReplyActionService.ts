@@ -9,6 +9,7 @@ interface StepsReplyActionData {
   queueId?: number;
   userIdDestination?: number;
   nextStepId?: number;
+  replyDefinition?: string;
 }
 
 interface Request {
@@ -27,7 +28,8 @@ const UpdateStepsReplyActionService = async ({
     userId,
     queueId,
     userIdDestination,
-    nextStepId
+    nextStepId,
+    replyDefinition
   } = stepsReplyActionData;
 
   const stepsReplyAction = await StepsReplyAction.findOne({
@@ -40,7 +42,8 @@ const UpdateStepsReplyActionService = async ({
       "userId",
       "queueId",
       "userIdDestination",
-      "nextStepId"
+      "nextStepId",
+      "replyDefinition"
     ]
   });
 
@@ -55,7 +58,8 @@ const UpdateStepsReplyActionService = async ({
     userId,
     queueId,
     userIdDestination,
-    nextStepId
+    nextStepId,
+    replyDefinition
   });
 
   await stepsReplyAction.reload({
@@ -67,7 +71,8 @@ const UpdateStepsReplyActionService = async ({
       "userId",
       "queueId",
       "userIdDestination",
-      "nextStepId"
+      "nextStepId",
+      "replyDefinition"
     ]
   });
 

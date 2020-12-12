@@ -9,6 +9,7 @@ interface Request {
   queueId?: number;
   userIdDestination?: number;
   nextStepId?: number;
+  replyDefinition?: string;
 }
 
 const CreateStepsReplyActionService = async ({
@@ -18,7 +19,8 @@ const CreateStepsReplyActionService = async ({
   userId,
   queueId,
   userIdDestination,
-  nextStepId
+  nextStepId,
+  replyDefinition
 }: Request): Promise<StepsReplyAction> => {
   const stepsReplyAction = await StepsReplyAction.create({
     stepReplyId,
@@ -27,7 +29,8 @@ const CreateStepsReplyActionService = async ({
     userId,
     queueId,
     userIdDestination,
-    nextStepId
+    nextStepId,
+    replyDefinition
   });
 
   return stepsReplyAction;

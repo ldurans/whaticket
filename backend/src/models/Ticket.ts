@@ -23,10 +23,6 @@ import Whatsapp from "./Whatsapp";
 import AutoReply from "./AutoReply";
 import StepsReply from "./StepsReply";
 import Queue from "./Queue";
-
-import SendWhatsAppMessage from "../services/WbotServices/SendWhatsAppMessage";
-// import SetTicketMessagesAsRead from "../helpers/SetTicketMessagesAsRead";
-import ShowTicketService from "../services/TicketServices/ShowTicketService";
 import ShowStepAutoReplyMessageService from "../services/AutoReplyServices/ShowStepAutoReplyMessageService";
 
 @Table
@@ -139,13 +135,6 @@ class Ticket extends Model<Ticket> {
         autoReplyId: stepAutoReply.autoReply.id,
         stepAutoReplyId: stepAutoReply.id
       });
-      const ticket = await ShowTicketService(instance.id);
-      await SendWhatsAppMessage({
-        body: stepAutoReply.reply,
-        ticket,
-        quotedMsg: undefined
-      });
-      // await SetTicketMessagesAsRead(ticket);
     }
   }
 }
