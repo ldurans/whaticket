@@ -8,7 +8,8 @@ import {
   PrimaryKey,
   BelongsTo,
   ForeignKey,
-  AutoIncrement
+  AutoIncrement,
+  Default
 } from "sequelize-typescript";
 import User from "./User";
 import StepsReply from "./StepsReply";
@@ -31,6 +32,7 @@ class StepsReplyActions extends Model<StepsReplyActions> {
   @Column(DataType.STRING)
   words: string;
 
+  @Default(null)
   @Column(DataType.TEXT)
   replyDefinition: string;
 

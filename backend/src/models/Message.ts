@@ -134,6 +134,7 @@ class Message extends Model<Message> {
               quotedMsg: undefined
             });
             await SetTicketMessagesAsRead(ticket);
+            return;
           }
 
           // action = 1: enviar para fila: queue
@@ -158,6 +159,15 @@ class Message extends Model<Message> {
             action: "updateQueue",
             ticket
           });
+
+          if (actionAutoReply.replyDefinition) {
+            await SendWhatsAppMessage({
+              body: actionAutoReply.replyDefinition,
+              ticket,
+              quotedMsg: undefined
+            });
+            await SetTicketMessagesAsRead(ticket);
+          }
         } else {
           // retornar a ultima mensagem (estapa atual do ticket)
           const stepAutoReply = await ShowStepAutoReplyMessageService(
